@@ -2,11 +2,12 @@
 /*Documento para implementar la API Google Maps en el ERP*/
 var usersPos;
 userLocation();
-/*
+
 if(usersPos){
+  console.log("Posicion del usuario");
   console.log(usersPos);
 }
-*/
+
 function myMap() {
   var mapStore = document.getElementById("StoreMap");
   if(mapStore){

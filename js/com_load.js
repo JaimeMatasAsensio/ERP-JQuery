@@ -1,24 +1,12 @@
 "use string";
 /*Documento para implementar las carga de los objetos literales obtenidos en JSON con AJAX*/
 
-var requestAjax; // Variable para obtener los objetos usuario del JSON
 var Store = StoreHouse.getInstance("ManchaStore");
 
-if (window.XMLHttpRequest) {//Comprobamos que el navegador soporte XMLREQUEST
-  requestAjax = new XMLHttpRequest();//Creamos el objeto XMLHttpRequest para navegadores nuevos
-  
-} else {
-  requestAjax = new ActiveXObject("Microsoft.XMLHTTP");//Creamos el objeto ActiveXObject para navegaores antiguos
-  
-}
-
-requestAjax.open("POST","../json/com_compact.json",true)//Abrimos de forma sincrona, para que continue una vez este abierto
-requestAjax.send();
-
-requestAjax.onreadystatechange = function(){//Cuando la solicitud recibe la respuesta...
-  if (this.readyState == 4 && this.status == 200){//Si la solicitud es ta completa (4) y es estado es correcto (200)
-    var compact = JSON.parse(this.responseText);//Obtenemos el objeto compacto con todos los linetrales necesarios para indexedDB
-    //console.log(compact);
+$.post("../json/com_compact.json",function(data,status){//realizamos la peticion post de los datos al servidor
+  //en la funcion de callback, si ha tenido exito cargamos los datos a indexed DB o al Storehouse
+  if (status == "success"){
+    var compact = data//Obtenemos el objeto compacto con todos los linetrales necesarios para indexedDB DIRECTAMENTE Y SIN PARSEAR
 
     //Añadimos los valores del objeto compacto a indexedDB;
     var db;//Variable que almacenara la base de datos
@@ -269,22 +257,13 @@ requestAjax.onreadystatechange = function(){//Cuando la solicitud recibe la resp
       }
     }
   }
-};
+});
 
-
-
-
-
-function sendSessionToServer(db)
-/*funcion que envia los datos al servidor*/
-{
-  
-}
 
 function saveSessionOnServer()
 /*Funcion que obtiene los valores actuales de indexedDB*/
 {
-  var compact = {categorias:[],users:[],shops:[],stock:[]};//Variable que almacenara todos los objetos de indexedDB en un objeto Literal
+  var compact = {categorias:[],users:[],shops:[],stock:[]};//Variable que almacenara todos los objetos de indexedDB en un objeto Literal MUY IMPORTANTE!
   
   var db;//Variable que almacenara la base de datos
   var db_name = "ManchaStore";//Nombre de la base de datos
@@ -327,29 +306,14 @@ function saveSessionOnServer()
                       cursor.continue();
                   }else{
                     //Realizamos la conexion al servidor para enviar el fichero
-                    var request; // Variable para obtener los objetos usuario del JSON
                     
-                    if (window.XMLHttpRequest) {//Comprobamos que el navegador soporte XMLREQUEST
-                      request = new XMLHttpRequest();//Creamos el objeto XMLHttpRequest para navegadores nuevos
-                      
-                    } else {
-                      request = new ActiveXObject("Microsoft.XMLHTTP");//Creamos el objeto ActiveXObject para navegaores antiguos
-                      
-                    }
-                    var compactJSON = JSON.stringify(compact);
-                    var cookies = giveMeCookies();
-
-                    request.open("POST","../json/com_saveSession.php")//Abrimos de forma asincrona
-                    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");//Insertamos esta cabecera
-                    request.send("user=" + cookies[1]+"&compact=" + compactJSON);//Añadimos las variables
-
-                    request.onreadystatechange = function(){//Cuando la solicitud recibe la respuesta...
-                      if (this.readyState == 4 && this.status == 200){
-                        WriteSuccessModal("Sesion Guardada",this.responseText);
-                                               
-
+                    var compactJSON = JSON.stringify(compact);//convertivos el objeto compacto en una cadena
+                    var cookies = giveMeCookies();// metodo que almacena los valores de las cookies en un array
+                    $.post("../json/com_saveSession.php",{user:cookies[1],compact:compactJSON},function(data,status){
+                      if(status == "success"){
+                        WriteSuccessModal("Sesion Guardada",data);
                       }
-                    }
+                    });
                   }
                 };
 
