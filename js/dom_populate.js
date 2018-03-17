@@ -11,61 +11,100 @@ var divCloseWindow = document.getElementById("closeWindow");
 divCloseWindow.appendChild(btnCloseWindows());
 
 function initPopulate()
-/*Funcion que inicializa la pagina cargando las tiendas que existen dentro del storehouse */
+/*Funcion que inicializa la pagina cargando las tiendas que existen dentro del storehouse. Todo el texto comentado es codigo con DOM... */
 {
   clearMainCont();
 
+  var divCab = $('<div></div>',{'id':'cabecera','class':'row'});
+  $('#main-cont').append(divCab);
+  /*
   var divCab = document.createElement("div");
   divCab.setAttribute("id","cabecera");
   divCab.className = "row";
   IdMainCont.appendChild(divCab);
+  */
 
+  var h2Cab =$("<h2></h2>",{id:"titleStore",class:"col-md-12 textCenter"}).text(Store.nombre);
+  $(divCab).append(h2Cab);
+
+  /*
   var h2Cab = document.createElement("h2");
   h2Cab.setAttribute("id","titleStore");
   h2Cab.className = "col-md-12 text-center";
   h2Cab.appendChild(document.createTextNode(Store.nombre));
   divCab.appendChild(h2Cab);
+  */
 
+  var divSotreMap = $("<div></div>",{id:"StoreMap",class:"maps map_store"});
+  $(divCab).append(divSotreMap);
+  
+  /*
   var divStoreMap = document.createElement("div");
   divStoreMap.setAttribute("id","StoreMap");
   divStoreMap.className = "maps map_store";
   divCab.appendChild(divStoreMap);
-  
+  */
+
+  var divTiendas = $("<div></div>",{id:"tiendas",class:"row"});
+  $("#main-cont").append(divTiendas);
+
+  /*
   var divTiendas = document.createElement("div");
   divTiendas.setAttribute("id","tiendas");
   divTiendas.className = "row";
-
   IdMainCont.appendChild(divTiendas);
+  */
 
   var shopsIte = Store.shopIte;
   var shop = shopsIte.next();
   var index = 1;
   while(!shop.done){
+
+    var divTienda = $("<div></div>", {id:"divTienda",class:"col-sm-4 text-center"});
+    $(divTiendas).append(divTienda);
+    /*
     var divTienda = document.createElement("div");
     divTienda.setAttribute("id","divTienda");
     divTienda.className = "col-sm-4 text-center";
     divTiendas.appendChild(divTienda);
+    */
+    
+    var h3Tienda =$("<h3></h3>",{id:"titleShop"}).text(shop.value.nombre);
+    $(divTienda).append(h3Tienda);
 
+    /*
     var h3Tienda = document.createElement("h3");
     h3Tienda.setAttribute("id","titleShop"+index);
     h3Tienda.appendChild(document.createTextNode(shop.value.nombre));
     divTienda.appendChild(h3Tienda);
-    
+    */
+
+    var divShopMap = $("<div></div>",{id:shop.value.cif, class: "maps mapShop_mini"});
+    $(divTienda).append(divShopMap);
+
+    /*
     var divShopMap = document.createElement("div");
     divShopMap.setAttribute("id",shop.value.cif);
     divShopMap.className = "maps mapShop_mini";
     divTienda.appendChild(divShopMap);
+    */
     
-    divTienda.appendChild(menuCategoryShopPopulate(shop.value));
+    $(divTienda).append(menuCategoryShopPopulate(shop.value));
 
+    //divTienda.appendChild(menuCategoryShopPopulate(shop.value));
+
+    var BtnVerTienda = $("<button></button>",{id:"showShop"+index,class:"btn btn-success"}).text("Ver Tienda");
+    $(BtnVerTienda).click(shopPopulate(shop.value));
+    $(divTienda).append(BtnVerTienda);
+    
+    /*
     var BtnVerTienda = document.createElement("button");
     BtnVerTienda.setAttribute("id","showShop"+index);
     BtnVerTienda.className = "btn btn-success";
     BtnVerTienda.appendChild(document.createTextNode("Ver Tienda"));
-
     divTienda.appendChild(BtnVerTienda);
-
     BtnVerTienda.addEventListener("click",shopPopulate(shop.value));
+    */
 
     index++;
     shop = shopsIte.next();
@@ -84,128 +123,246 @@ function shopPopulate(shop)
   var tienda = shop;
   return function(){
     clearMainCont();
+    var divCab = $("<div></div>",{id: "cabecera", class: "row"});
+    $("#main-cont").append(divCab);
 
+    /* 
     var divCab = document.createElement("div");
     divCab.setAttribute("id","cabecera");
     divCab.className = "row";
     IdMainCont.appendChild(divCab);
+    */
 
+    var h2Cab = $("<h2></h2>",{id: "titleStore", class: "col-md-12 text-center"}).text("" + tienda.nombre);
+    $(divCab).append(h2Cab);
+
+    /*
     var h2Cab = document.createElement("h2");
     h2Cab.setAttribute("id","titleStore");
     h2Cab.className = "col-md-12 text-center";
     h2Cab.appendChild(document.createTextNode(tienda.nombre));
     divCab.appendChild(h2Cab);
+    */
 
+    var divinfoShop = $("<div></div>",{ class: "row"});
+    $("#main-cont").append(divinfoShop);
+
+    /*
     var divinfoShop = document.createElement("div");
     divinfoShop.className = "row";
     IdMainCont.appendChild(divinfoShop);
+    */
 
-    var divInfoShopText = document.createElement("div");
-    divInfoShopText.className = "col-md-2";
-    divinfoShop.appendChild(divInfoShopText);
-
+    var divInfoShopMap = $("<div></div>",{class: "col-md-10"});
+    $(divinfoShop).append(divInfoShopMap);
+    
+    /*
     var divInfoShopMap = document.createElement("div");
     divInfoShopMap.className = "col-md-10";
     divinfoShop.appendChild(divInfoShopMap);
-
+    */
+    
+    var divMapShop = $("<div></div>", {id: shop.cif, class:"maps mapShop_medium"});
+    $(divInfoShopMap).append(divMapShop);
+    
+    /*
     var divMapShop = document.createElement("div");
     divMapShop.className = "maps mapShop_medium";
     divMapShop.setAttribute("id",shop.cif);
     divInfoShopMap.appendChild(divMapShop);
+    */
 
+    var divInfoShopText = $("<div></div>",{class:"col-md-2"});
+    $(divinfoShop).append(divInfoShopText);
+
+    /*
+    var divInfoShopText = document.createElement("div");
+    divInfoShopText.className = "col-md-2";
+    divinfoShop.appendChild(divInfoShopText);
+    */
+    
+    var infoTienda = $("<p></p>", {class: "infoTienda"}).text("Cif: " + tienda.cif);
+    $(divInfoShopText).append(infoTienda);
+    
+    /*
     var infoTienda = document.createElement("p");
     infoTienda.className = "infoTienda";
     infoTienda.innerHTML = "Cif: "+tienda.cif;
     divInfoShopText.appendChild(infoTienda);
+    */
+    var infoTienda1 = $("<p></p>", {class: "infoTienda"}).text("Direccion: " + tienda.direccion);
+    $(divInfoShopText).append(infoTienda1);
 
+    /*
     var infoTienda1 = document.createElement("p");
     infoTienda1.className = "infoTienda";
     infoTienda1.innerHTML = "Direccion: "+tienda.direccion;
     divInfoShopText.appendChild(infoTienda1);
+    */
 
+    var infoTienda2 = $("<p></p>", {class: "infoTienda"}).text("telefono: " + tienda.telefono);
+    $(divInfoShopText).append(infoTienda2);
+    
+    /*
     var infoTienda2 = document.createElement("p");
     infoTienda2.className = "infoTienda";
     infoTienda2.innerHTML = "Telefono: "+tienda.telefono;
     divInfoShopText.appendChild(infoTienda2);
-
+    */
+    
+    var divProductos = $("<div></div>",{id :"items"});
+    $("#main-cont").append(divProductos);
+    
+    /*
     var divProductos = document.createElement("div");
     divProductos.setAttribute("id","items");
     IdMainCont.appendChild(divProductos);
-
+    */
     var stockShop = tienda.stockIte;
     var item = stockShop.next();
     while(!item.done){
       
+      var detPro = $("<div></div>",{class: "col-sm-12 detProd"})
+      $(divProductos).append(detPro);
+      
+      /*
       var detPro = document.createElement("div");
       detPro.className = "col-sm-12 detProd";
       divProductos.appendChild(detPro);
+      */
       
+      var NomPro = $("<h3></h3>",{class: "cabProd"}).text(item.value.producto.nombre);
+      $(detPro).append(NomPro);
+      
+      /*
       var NomPro = document.createElement("h3");
       NomPro.className = "cabProd";
       NomPro.appendChild(document.createTextNode(item.value.producto.nombre));
       detPro.appendChild(NomPro);
+      */
       
+      var divImg = $("<div></div>",{class: "col-sm-6 text-center"});
+      $(detPro).append(divImg);
+
+      /*
       var divImg = document.createElement("div");
       detPro.appendChild(divImg);
       divImg.className = "col-sm-6 text-center";
+      */
 
+      var imgPro = $("<img>",{src:item.value.producto.imagenes,"id": item.value.producto.SN +";"+tienda.cif,class:"imgPro", draggable: true});
+      $(divImg).append(imgPro);
+      
+      /*
       var imgPro = document.createElement("img");
       imgPro.setAttribute("src",item.value.producto.imagenes);
       imgPro.setAttribute("id",item.value.producto.SN +";"+tienda.cif);
       imgPro.setAttribute("draggable","true");
       imgPro.className = "imgPro";
+      divImg.appendChild(imgPro);
+      */
       
-      //Si hay un suario registrado habilitamos el producto para que se pueda borrar mediante drag&drop
+      //Si hay un usuario registrado habilitamos el producto para que se pueda borrar mediante drag&drop
       if(document.cookie){
-        imgPro.addEventListener("dragstart",dragProduct);
+        document.getElementById(item.value.producto.SN +";"+tienda.cif).addEventListener("dragstart",dragProduct);
       }
 
-      divImg.appendChild(imgPro);
+      var divInfo = $("<div></div>",{class: "col-sm-6 infoPro divInfo"});
+      $(detPro).append(divInfo);
 
+      /*
       var divInfo = document.createElement("div");
       detPro.appendChild(divInfo);
       divInfo.className = "col-sm-6 infoPro";
+      */
+      
+      var InfoProducto = $("<p></p>").html("<b>Nombre: </b>" + item.value.producto.nombre);
+      $(divInfo).append(InfoProducto);
 
+      /*
       var InfoProducto = document.createElement("p");
       InfoProducto.innerHTML = "<b>Nombre: </b>" + item.value.producto.nombre;
       divInfo.appendChild(InfoProducto);
+      */
 
+      var InfoProducto1 = $("<p></p>").html("<b>Marca: </b>" + item.value.producto.marca);
+      $(divInfo).append(InfoProducto1);
+
+      /*
       var InfoProducto1 = document.createElement("p");
       InfoProducto1.innerHTML = "<b>Marca: </b>" + item.value.producto.marca;
       divInfo.appendChild(InfoProducto1);
+      */
 
+      var InfoProducto4 = $("<p></p>").html("<b>En Stock: </b>" + item.value.cantidad + " Unidades");
+      $(divInfo).append(InfoProducto4);
+      
+      /*
       var InfoProducto4 = document.createElement("p");
       InfoProducto4.innerHTML = "<b>En Stock: </b>" + item.value.cantidad + " Unidades";
       divInfo.appendChild(InfoProducto4);
+      */
 
+      var InfoProducto2 = $("<p></p>").html("<b>Precio + I.V.A: </b>" + item.value.producto.precioConIVA + " €");
+      $(divInfo).append(InfoProducto2);
+
+      /*
       var InfoProducto2 = document.createElement("p");
       InfoProducto2.innerHTML = "<b>Precio + I.V.A: </b>" + item.value.producto.precioConIVA + " €";
       divInfo.appendChild(InfoProducto2);
+      */
 
+      var InfoProducto3 = $("<p></p>").html("<b>I.V.A (%): </b>" + item.value.producto.IVA + " %");
+      $(divInfo).append(InfoProducto3);
+
+      /*
       var InfoProducto3 = document.createElement("p");
       InfoProducto3.innerHTML = "<b>I.V.A (%): </b>" + item.value.producto.IVA + " %";
       divInfo.appendChild(InfoProducto3);
+      */
+      
+      var BtnDetalleProducto = $("<button></button>",{class:"btn btn-default"}).append("Detalles del producto");
+      $(divInfo).append(BtnDetalleProducto);
+      $(BtnDetalleProducto).click(productShopPopulate(shop,item.value.producto.IdProduct));
 
+      /*
       var BtnDetalleProducto = document.createElement("button");
       BtnDetalleProducto.className = "btn btn-default";
       BtnDetalleProducto.appendChild(document.createTextNode("Detalles del producto"));
       divInfo.appendChild(BtnDetalleProducto);
       BtnDetalleProducto.addEventListener("click",productShopPopulate(shop,item.value.producto.IdProduct));
+      */
 
+      var BtnGlobalProducto = $("<button></button>",{class:"btn btn-default"}).append("Producto en todo el ERP");
+      $(divInfo).append(BtnGlobalProducto);
+      $(BtnGlobalProducto).click(globalProductPopulate(item.value.producto.IdProduct));
+      
+      /*
       var BtnGlobalProducto = document.createElement("button");
       BtnGlobalProducto.className = "btn btn-default";
       BtnGlobalProducto.appendChild(document.createTextNode("Producto en todo el ERP"));
       divInfo.appendChild(BtnGlobalProducto);
       BtnGlobalProducto.addEventListener("click",globalProductPopulate(item.value.producto.IdProduct));
-
+      */
+      
+      var BtnVerProducto = $("<button></button>",{class:"btn btn-success"}).append("Ver Producto");
+      $(divInfo).append(BtnVerProducto);
+      $(BtnVerProducto).click(ProductInWindowFromShop(shop,item.value.producto.IdProduct));
+      
+      /*
       var BtnVerProducto = document.createElement("button");
       BtnVerProducto.className = "btn btn-success";
       BtnVerProducto.appendChild(document.createTextNode("Ver Producto"));
       divInfo.appendChild(BtnVerProducto);
       BtnVerProducto.addEventListener("click",ProductInWindowFromShop(shop,item.value.producto.IdProduct));
-      
+      */
+
       //Si hay un suario registrado habilitamos el producto para que se pueda borrar mediante drag&drop
+      
       if(document.cookie){
+
+        var aux = document.getElementsByClassName("divInfo");
+       
         var BtnDropProducto = document.createElement("button");
         BtnDropProducto.className = "btn btn-danger";
         BtnDropProducto.style.marginLeft = "4px";
@@ -213,29 +370,40 @@ function shopPopulate(shop)
         spanIcon.className = "glyphicon glyphicon-trash";
         BtnDropProducto.appendChild(spanIcon);
 
-        divInfo.appendChild(BtnDropProducto);
+        aux[aux.length-1].appendChild(BtnDropProducto);
         BtnDropProducto.addEventListener("dragover",allowDropProduct);
         BtnDropProducto.addEventListener("drop",dropProduct);
       }
-
+      
       item = stockShop.next();
     }
 
+    var divAtras = $("<div></div>",{class: "row text-center"});
+    $("#main-cont").append(divAtras);
+
+    /*
     var divAtras = document.createElement("div");
     divAtras.className = "row text-center";
     IdMainCont.appendChild(divAtras);
+    */
 
+    var BtnAtras = $("<button></button>",{class: "btn btn-success btn-lg"});
+    $(divAtras).append(BtnAtras);
+    $(BtnAtras).click(initPopulate).text("Atras");
+
+    var iconGalon = $("<span></span>",{class: "glyphicon glyphicon-chevron-left"});
+    $(BtnAtras).append(iconGalon);
+
+    /*
     var BtnAtras = document.createElement("button");
     BtnAtras.className = "btn btn-success btn-lg";
-
     var iconGalon = document.createElement("span");
     iconGalon.className = "glyphicon glyphicon-chevron-left";
     BtnAtras.appendChild(iconGalon);
     BtnAtras.appendChild(document.createTextNode("Atras"));
     IdMainCont.appendChild(BtnAtras);
-
-
     BtnAtras.addEventListener("click",initPopulate);
+    */
 
     myMap();
   };

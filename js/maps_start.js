@@ -72,7 +72,7 @@ function myMap() {
     var element = shop2.coords;
 
     var centerMap = new google.maps.LatLng(element.longitud, element.latitud);
-    var zoom = (mapShop2.className == "maps mapShop_medium")? 10: 8;
+    var zoom = (mapShop2.className == "maps mapShop_medium")? 9: 8;
     var mapOptions = {center: centerMap, zoom: zoom};
     var map = new google.maps.Map(mapShop2, mapOptions);
     var shopMarker2 = new google.maps.Marker({position:centerMap,
@@ -101,7 +101,7 @@ function myMap() {
     var element = shop3.coords;
 
     var centerMap = new google.maps.LatLng(element.longitud, element.latitud);
-    var zoom = (mapShop3.className == "maps mapShop_medium")? 10: 8;
+    var zoom = (mapShop3.className == "maps mapShop_medium")? 9: 8;
     
     var mapOptions = {center: centerMap, zoom: zoom};
     var map = new google.maps.Map(mapShop3, mapOptions);
